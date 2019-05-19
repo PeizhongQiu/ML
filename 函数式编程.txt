@@ -1,0 +1,30 @@
+fun reverse ([]:int list):int list=[]
+|	reverse(d::L)=(reverse(L))@[d];
+
+fun rev([],ys)=ys
+|	rev(d::L,ys)=rev(L,d::ys);
+fun reverse' xs = rev(xs,[]);
+
+fun interleave(x::xs,y::ys)=x::y::interleave(xs,ys)
+|	interleave([],ys)=ys
+|	interleave(xs,[])=xs;
+
+datatype tree = Empty 
+|	Node of tree * int * tree;
+
+fun listToTree []=Empty
+|	listToTree xs=
+		let val k=length xs div 2
+		val y::ys = List.drop(xs,k)
+		in Node(listToTree(List.take(xs,k)),y,listToTree ys)
+		end;
+
+fun revT Empty = Empty
+|	revT (Node(t1,x,t2))=Node(revT(t2),x,revT(t1));
+
+fun binarySearch(Empty,y)=0
+|	binarySearch(Node(t1,x,t2),y)=
+		case Int.compare(x, y) of
+		GREATER=>binarySearch(t1,y)
+|		EQUAL=>1
+|		LESS=>binarySearch(t2,y);
